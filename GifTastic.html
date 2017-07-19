@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
+</head>
+<body>
+<div class="row">
+	<div class="col-md-12">
+		<div class="container" id="buttons-view"></div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-9" id="city-img"></div>
+	<div class="col-md-3">
+		<div class="panel panel-info">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Search for Cities around the world!</h3>
+  			</div>
+  				<div class="panel-body">
+  				<p>Add a city</p>
+  				<input type="text" class="form-control" placeholder="Search" id="city-input">
+  				<button class="btn btn-success" id="search-button">Search</button>
+    			</div>
+			</div>
+		</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+var topics = ["Madrid", "London", "Japan", "Santo Domingo"];
+
+function displayCityGif() {
+	$(".city").on("click", function(){ 
+		var city = $(this).attr("city-name")
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + city + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+		$.ajax({
+			url: queryURL,
+			method: "GET"
+		})
+
+		.done(function(response) {
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
+
+            var rating = results[i].rating;
+
+            var p = $("<p>").text("Rating: " + rating);
+
+            var cityImage = $("<img>");
+            cityImage.attr("src", results[i].images.fixed_height.url);
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(cityImage);
+
+            $("#city-img").prepend(gifDiv);
+          }
+
+	})})};
+
+
+
+
+function renderButtons(){
+
+	$("#buttons-view").empty();
+	for (var i = 0; i < topics.length; i++) {
+		var a = $("<button>");
+		a.addClass("city btn btn-primary");
+		a.attr("city-name", topics[i]);
+		a.attr("id", )
+		a.text(topics[i]);
+		$("#buttons-view").append(a);
+		}
+}
+$("#search-button").on("click", function(event) {
+	event.preventDefault();
+
+	var city = $("#city-input").val().trim();
+	topics.push(city);
+	renderButtons();
+	});
+
+$(document).on("click", ".city", displayCityGif);
+
+renderButtons();
+</script>
+
+
+</body>
+</html>
